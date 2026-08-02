@@ -1,0 +1,39 @@
+name: morning-news
+
+# GitHub Secrets は1つも使わない。APIキーもLLMも使わないため（NFR-T-06）。
+on:
+  schedule:
+    # cron はUTCで書く。JST 05:30 は UTC 20:30（前日）。ここを間違えると9時間ずれる。
+    # 混雑時に数分〜十数分遅れることがあるが、06:00に読む運用なら間に合う。
+    - cron: "30 20 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: morning-news
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 依存パッケージなし（外部ライブラリ0個）。npm install は不要。
+      - name: 生成
+        run: node news/build.js
+
+      - name: commit & push
+        run: |
+          git config user.name  "morning-news-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add news/
+          git diff --cached --quiet || git commit -m "news: $(TZ=Asia/Tokyo date +%Y-%m-%d)"
+          git push

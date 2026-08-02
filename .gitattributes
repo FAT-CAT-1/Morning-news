@@ -1,0 +1,5 @@
+# 生成はLinux（GitHub Actions）、編集はWindows。改行コードを固定しておかないと
+# 中身が同じ日でも改行差だけでcommitが立ってしまう。
+* text=auto eol=lf
+
+*.png binary

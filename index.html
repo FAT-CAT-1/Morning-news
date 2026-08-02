@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>夏休みダイヤ 2026</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#0E1319">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="夏休みダイヤ">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<style>
+:root{
+  --bg:#0E1319;--surf:#161D26;--surf2:#1E2833;--line:#2A3644;
+  --tx:#EDF2F7;--mut:#9AAABA;
+  --eng:#4BA6F0;--cert:#B088F7;--body:#FF6B7C;--read:#FFB13D;
+  --rest:#3E4C5C;--free:#2B3644;--acc:#2DD4BF;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --jp:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Noto Sans JP","Meiryo",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;font-size:17px}
+body{background:var(--bg);color:var(--tx);font-family:var(--jp);line-height:1.6;padding-bottom:56px;padding-top:env(safe-area-inset-top)}
+.wrap{max-width:860px;margin:0 auto;padding:0 15px}
+.hd{padding:24px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.kick{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--acc)}
+h1{font-size:30px;font-weight:800;letter-spacing:.02em;margin:6px 0 4px}
+.per{font-family:var(--mono);font-size:13px;color:var(--mut)}
+.tog{display:flex;gap:9px;margin:18px 0 14px}
+.tog button{flex:1;padding:13px 0;border:1px solid var(--line);background:var(--surf);color:var(--mut);font-family:var(--jp);font-size:16px;font-weight:700;border-radius:10px;cursor:pointer;min-height:48px}
+.tog button[aria-pressed="true"]{background:var(--surf2);color:var(--tx);border-color:var(--acc)}
+.tog button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.lg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:14px;font-size:12.5px;color:var(--mut)}
+.lg b{display:flex;align-items:center;gap:6px;font-weight:600}
+.sw{width:11px;height:11px;border-radius:3px}
+.dow{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px}
+.dow div{text-align:center;font-size:12.5px;color:var(--mut);font-weight:700;padding:3px 0}
+.dow div:first-child{color:#F0899A}.dow div:last-child{color:#7FC0F5}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cell{position:relative;aspect-ratio:1/1.3;background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:5px 3px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;min-height:60px;font-family:inherit;color:inherit}
+.cell:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.cell:active{transform:scale(.96)}
+.cell.void{background:transparent;border-color:transparent;pointer-events:none}
+.cell .d{font-family:var(--mono);font-size:15px;font-weight:700;line-height:1}
+.cell.sun .d{color:#F0899A}.cell.sat .d{color:#7FC0F5}
+.cell.mile{border-color:var(--acc)}
+.cell.off{background:#11171E}
+.bars{display:flex;flex-direction:column;gap:1px;width:12px;flex:1;border-radius:2px;overflow:hidden}
+.bars i{display:block;width:100%}
+.mk{position:absolute;top:3px;right:5px;font-size:11px;line-height:1}
+.done{position:absolute;bottom:4px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--acc)}
+.wknav{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.wknav button{width:52px;height:52px;flex:none;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--tx);font-size:22px;cursor:pointer}
+.wknav button:disabled{opacity:.3}
+.wknav button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.wknav .lbl{flex:1;text-align:center}
+.wknav .lbl b{display:block;font-size:20px;font-weight:800}
+.wknav .lbl span{font-family:var(--mono);font-size:13px;color:var(--mut)}
+.bigwrap{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:20px 18px;margin-bottom:16px;text-align:center}
+.bigwrap .cap{font-size:13px;color:var(--mut);font-weight:700;letter-spacing:.08em}
+.bignum{font-family:var(--mono);font-size:clamp(56px,17vw,82px);font-weight:700;line-height:1.05;letter-spacing:-.02em;color:var(--acc);font-variant-numeric:tabular-nums}
+.bignum small{font-size:.4em;color:var(--mut);margin-left:4px}
+.bigsub{font-size:14px;color:var(--mut);margin-top:2px}
+.goals{display:grid;gap:11px;margin-bottom:18px}
+@media(min-width:640px){.goals{grid-template-columns:1fr 1fr}}
+.goal{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.goal .gt{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.goal .gn{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
+.goal .gp{font-family:var(--mono);font-size:34px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.goal .gp small{font-size:.42em;color:var(--mut)}
+.bar{height:9px;border-radius:5px;background:#212C38;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:5px;transition:width .4s ease}
+.goal .gd{font-size:12.5px;color:var(--mut);margin-top:7px}
+.wkdays{display:grid;gap:8px}
+.wkday{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surf);border:1px solid var(--line);border-radius:11px;padding:13px 14px;cursor:pointer;color:inherit;font-family:inherit;min-height:60px}
+.wkday:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.wkday .wd1{font-family:var(--mono);font-size:19px;font-weight:700;width:64px;flex:none}
+.wkday .wd1 span{font-size:13px;color:var(--mut);margin-left:3px}
+.wkday .wd2{flex:1;min-width:0}
+.wkday .wd2 b{font-size:15.5px;font-weight:700;display:block}
+.wkday .wd2 span{font-size:12.5px;color:var(--mut)}
+.wkday .wd3{font-family:var(--mono);font-size:15px;color:var(--mut);flex:none}
+.wkday.full .wd3{color:var(--acc)}
+/* 目標パネル */
+.goalbtn{
+  width:100%;margin-top:22px;padding:19px 20px;border-radius:14px;
+  border:1px solid var(--acc);background:linear-gradient(180deg,#17262C,#132029);
+  color:var(--tx);font-family:inherit;font-size:19px;font-weight:800;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:64px
+}
+.goalbtn:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.goalbtn .arw{font-size:22px;color:var(--acc);transition:transform .25s}
+.goalbtn[aria-expanded="true"] .arw{transform:rotate(180deg)}
+.goalbtn small{display:block;font-size:12.5px;font-weight:600;color:var(--mut);margin-top:3px}
+#goalPanel{display:none;margin-top:12px}
+#goalPanel.on{display:block;animation:up .22s ease both}
+.gsec{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:16px 17px;margin-bottom:11px}
+.gsec h3{font-size:18px;font-weight:800;display:flex;flex-wrap:wrap;align-items:baseline;gap:9px;margin-bottom:9px}
+.stars{font-family:var(--mono);font-size:14px;letter-spacing:.06em}
+.gsec ul{list-style:none}
+.gsec li{position:relative;padding:5px 0 5px 17px;font-size:14.5px;line-height:1.62}
+.gsec li::before{content:"";position:absolute;left:0;top:14px;width:6px;height:6px;border-radius:50%;background:var(--line)}
+.gsec.hi{border-color:rgba(45,212,191,.45)}
+.ov{position:fixed;inset:0;background:rgba(6,9,13,.85);z-index:40;display:none}
+.ov.on{display:block;animation:fade .18s ease both}
+.sheet{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;flex-direction:column}
+.sheet.on{display:flex;animation:up .22s cubic-bezier(.2,.8,.3,1) both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes slL{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes slR{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+.slideL{animation:slL .2s ease both}.slideR{animation:slR .2s ease both}
+@media(prefers-reduced-motion:reduce){.ov.on,.sheet.on,.slideL,.slideR,#goalPanel.on{animation:none}}
+.shd{padding:16px 15px 14px;border-bottom:1px solid var(--line);background:var(--surf);flex:none;padding-top:max(16px,env(safe-area-inset-top))}
+.navrow{display:flex;align-items:center;gap:10px}
+.navbtn{width:46px;height:46px;flex:none;border-radius:11px;border:1px solid var(--line);background:var(--surf2);color:var(--tx);font-size:20px;cursor:pointer}
+.navbtn:disabled{opacity:.28}
+.navbtn:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.shd .mid{flex:1;min-width:0;text-align:center}
+.shd h2{font-size:22px;font-weight:800}
+.shd .meta{font-size:13px;color:var(--mut);margin-top:4px;display:flex;flex-wrap:wrap;gap:5px 10px;justify-content:center}
+.chip{display:inline-block;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid}
+.mile-bar{margin-top:12px;padding:10px 12px;border-radius:8px;background:rgba(45,212,191,.13);border:1px solid rgba(45,212,191,.42);font-size:14px;font-weight:700;color:#84EDE0}
+.hint{text-align:center;font-size:11.5px;color:#57687A;margin-top:9px;font-family:var(--mono)}
+.sbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 15px calc(40px + env(safe-area-inset-bottom))}
+.tl{list-style:none}
+.tl li{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid #1C2530;align-items:flex-start}
+.tl li:last-child{border:none}
+.cb{flex:none;width:26px;height:26px;margin-top:1px;border-radius:7px;border:1.5px solid var(--line);background:var(--surf);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--bg);padding:0}
+.cb[aria-checked="true"]{background:var(--acc);border-color:var(--acc)}
+.cb:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.cb.na{visibility:hidden}
+.tbar{flex:none;width:4px;align-self:stretch;border-radius:2px;margin-top:3px}
+.tx1{flex:1;min-width:0}
+.tx1 .m1{font-size:17px;font-weight:700;display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.tx1 time{font-family:var(--mono);font-size:14px;color:var(--mut);flex:none;font-weight:600}
+.tx1 .m2{font-size:13.5px;color:var(--mut);margin-top:3px;line-height:1.55}
+.tl li.done .m1{color:var(--mut);text-decoration:line-through;text-decoration-thickness:1px}
+.memo{margin-top:24px}
+.memo label{display:block;font-size:14px;font-weight:700;color:var(--mut);margin-bottom:7px}
+.memo textarea{width:100%;min-height:92px;background:var(--surf);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:12px;font-family:inherit;font-size:16px;line-height:1.6;resize:vertical}
+.memo textarea:focus{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc)}
+.save{font-size:12.5px;color:var(--mut);margin-top:7px;min-height:17px;font-family:var(--mono)}
+.note{margin-top:18px;padding:12px 14px;border-radius:9px;background:var(--surf);border-left:3px solid var(--line);font-size:13.5px;color:var(--mut);line-height:1.6}
+.instbar{display:flex;gap:11px;align-items:center;background:linear-gradient(180deg,#17262C,#132029);border:1px solid var(--acc);border-radius:13px;padding:13px 15px;margin:16px 0 0}
+.instbar[hidden]{display:none}
+.instbar img{width:38px;height:38px;border-radius:9px;flex:none}
+.instbar .it{flex:1;min-width:0;font-size:13.5px;color:var(--mut);line-height:1.45}
+.instbar .it b{display:block;font-size:15.5px;color:var(--tx);font-weight:800}
+.instbar button{flex:none;min-height:44px;padding:0 16px;border-radius:10px;border:none;background:var(--acc);color:#08211E;font-family:inherit;font-size:14.5px;font-weight:800;cursor:pointer}
+.instbar button:focus-visible{outline:2px solid var(--tx);outline-offset:2px}
+.datarow{display:flex;gap:9px;margin-top:14px}
+.datarow button{flex:1;min-height:48px;border-radius:10px;border:1px solid var(--line);background:var(--surf);color:var(--mut);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.datarow button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(14px);z-index:80;background:#22303D;color:var(--tx);border:1px solid var(--line);border-radius:11px;padding:13px 17px;font-size:14px;max-width:88vw;opacity:0;pointer-events:none;transition:.24s;text-align:center;line-height:1.5}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mut);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd">
+    <div class="kick">SUMMER TIMETABLE 2026</div>
+    <h1>夏休みダイヤ</h1>
+    <div class="per">08/01 — 09/23 ・ 起床 06:00 ・ 就寝 22:30</div>
+  </div>
+
+  <div class="instbar" id="installBar" hidden>
+    <img src="./icon-192.png" alt="">
+    <div class="it"><b>ホーム画面に追加</b><span id="instHint">アプリとして起動でき、オフラインでも使えます</span></div>
+    <button id="btn-install" type="button">追加</button>
+  </div>
+
+  <div class="tog" role="group" aria-label="表示切替">
+    <button id="vMonth" aria-pressed="true">月表示</button>
+    <button id="vWeek" aria-pressed="false">週表示</button>
+  </div>
+
+  <div id="monthView">
+    <div class="tog" role="group" aria-label="月の切替">
+      <button id="b8" aria-pressed="true">8月</button>
+      <button id="b9" aria-pressed="false">9月</button>
+    </div>
+    <div class="lg">
+      <b><i class="sw" style="background:var(--eng)"></i>英語</b>
+      <b><i class="sw" style="background:var(--cert)"></i>資格</b>
+      <b><i class="sw" style="background:var(--body)"></i>身体</b>
+      <b><i class="sw" style="background:var(--read)"></i>読書</b>
+      <b><i class="sw" style="background:var(--acc)"></i>ビジコン</b>
+      <b>★ 節目</b>
+    </div>
+    <div class="dow"><div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div></div>
+    <div class="cal" id="cal"></div>
+  </div>
+
+  <div id="weekView" style="display:none">
+    <div class="wknav">
+      <button id="wPrev" aria-label="前の週">‹</button>
+      <div class="lbl"><b id="wTitle"></b><span id="wRange"></span></div>
+      <button id="wNext" aria-label="次の週">›</button>
+    </div>
+    <div class="bigwrap">
+      <div class="cap">この週の消化率</div>
+      <div class="bignum" id="wPct">0<small>%</small></div>
+      <div class="bigsub" id="wSub"></div>
+    </div>
+    <div class="goals" id="wGoals"></div>
+    <div class="wkdays" id="wDays"></div>
+  </div>
+
+  <button class="goalbtn" id="goalBtn" aria-expanded="false" aria-controls="goalPanel">
+    <span>夏休みに達成する目標<small>11項目・実現可能レベル付き</small></span>
+    <span class="arw" aria-hidden="true">⌄</span>
+  </button>
+  <div id="goalPanel">
+
+    <div class="gsec hi">
+      <h3>三陸特（第三級陸上特殊無線技士）<span class="stars" style="color:var(--acc)">★★★★★</span></h3>
+      <ul>
+        <li>8/11にCBT受験。合格したその日に免許申請まで済ませる</li>
+        <li>交付まで1〜2ヶ月。後期のドローン愛好会設立に間に合わせる生命線</li>
+        <li>必要15時間に対し21時間を配置。範囲が狭く過去問がほぼそのまま出る</li>
+        <li>不安なら養成課程（約1.2万円）に切り替えれば一発勝負を避けられる</li>
+      </ul>
+    </div>
+
+    <div class="gsec hi">
+      <h3>MOS Excel Associate（通常）<span class="stars" style="color:var(--acc)">★★★★★</span></h3>
+      <ul>
+        <li>8/12〜8/19を集中週にして、午後をすべてExcelに充てる</li>
+        <li>参考書をハイペースで1周＋模擬試験プログラムを2回以上</li>
+        <li>8/20に受験。<b>9/7からの財務省インターンに間に合う</b></li>
+        <li>既存の学習が7割済んでいるので、集中週26時間で十分に足りる</li>
+      </ul>
+    </div>
+
+    <div class="gsec">
+      <h3>MOS Excel Expert<span class="stars" style="color:#8FD98F">★★★★☆</span></h3>
+      <ul>
+        <li>8/21〜9/17に学習し、9/18に受験</li>
+        <li>Associate合格が前提。称号取得には上級2科目が必要な点に注意</li>
+        <li>合宿とインターンで9日空くため、確保できるのは約34時間</li>
+        <li>不合格でも9/19以降に再受験枠を作れる</li>
+      </ul>
+    </div>
+
+    <div class="gsec">
+      <h3>読書8冊<span class="stars" style="color:#8FD98F">★★★★☆</span></h3>
+      <ul>
+        <li>日曜の安息日に5時間。統計・因果推論・経営組織を先に仕込む</li>
+        <li>2年春の統計検定2級とFEの下地がここで作られる</li>
+        <li>アルゴリズム本と経営組織論は完読不要。章単位で止めてよい</li>
+      </ul>
+    </div>
+
+    <div class="gsec">
+      <h3>筋トレ 週3回<span class="stars" style="color:#F5C542">★★★☆☆</span></h3>
+      <ul>
+        <li>フル日の14:00〜15:00にA日とB日を交互に</li>
+        <li>合宿明けとインターン週で計9日途切れる。そこで完全に止まらないこと</li>
+        <li>「あと2〜3回できる」で止める。追い込まない</li>
+      </ul>
+    </div>
+
+    <div class="gsec">
+      <h3>英語（実力養成）<span class="stars" style="color:#F09A6A">★★☆☆☆</span></h3>
+      <ul>
+        <li>単語はターゲット1200 → ターゲット1900 → 金のフレーズの順</li>
+        <li>大岩の英文法を1周、ALC中級を100ユニット</li>
+        <li>TOEIC換算で320〜350程度が到達見込み。受験は後期のIPで</li>
+        <li><b>唯一の締切がない項目＝最も崩れやすい。</b>毎日の固定枠として機械的に回す</li>
+      </ul>
+    </div>
+
+    <div class="gsec">
+      <h3>二等ドローン 学科<span class="stars" style="color:#F09A6A">★★☆☆☆</span></h3>
+      <ul>
+        <li>MOS Associateを差し込んだため、夏は9/19以降の着手のみ</li>
+        <li>受験は10月。元のチャート（1年後期）通りなので遅れではない</li>
+        <li>教則は2026年7月14日から第5版。第4版準拠の問題集は使えない</li>
+      </ul>
+    </div>
+
+    <div class="gsec hi">
+      <h3>第11回かすかべビジネスプランコンテスト<span class="stars" style="color:#8FD98F">★★★★☆</span></h3>
+      <ul>
+        <li>日曜の安息日に週1時間、8回に分けて考察を積み上げる</li>
+        <li>8/2 課題の棚卸し → 8/9 部門決定 → 8/16 顧客特定 → 8/23 解決策</li>
+        <li>8/30 収益モデル → 9/6 競合 → 9/13 実現可能性 → 9/20 応募書類</li>
+        <li><b>応募締切は9/30。</b>夏休み最終日（9/23）の1週間後なので、9/20には提出版を作り終える</li>
+        <li>活かす強みはドローン・機材系、データ分析・Web制作、学生の視点</li>
+        <li>最終審査は11/11、表彰式は令和9年1月25日</li>
+      </ul>
+    </div>
+
+    <div class="gsec">
+      <h3>この夏はやらないと決めたこと<span class="stars" style="color:var(--mut)">★☆☆☆☆</span></h3>
+      <ul>
+        <li>TOEIC受験（実力養成のみ。スコア証明は後期以降）</li>
+        <li>簿記3級・ERE・FE・アマチュア無線3級</li>
+        <li>二等ドローンの実地試験と技能証明書の交付</li>
+        <li>これらは秋以降。着手しないことが計画の失敗ではありません</li>
+      </ul>
+    </div>
+
+    <div class="gsec">
+      <h3>数字で見た全体像</h3>
+      <ul>
+        <li>フル日18日・稽古日13日・安息日8日・受験日3日</li>
+        <li>合宿4日とインターン5日は完全に計画から外している</li>
+        <li>全ブロックを100%埋めた理論値のため、実際の消化率75〜80%で順調</li>
+        <li>週表示の消化率が70%を超えていれば、計画は生きています</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="datarow">
+    <button id="btn-export" type="button">記録を書き出す</button>
+    <button id="btn-import" type="button">記録を読み込む</button>
+    <input type="file" id="fileIn" accept="application/json,.json" hidden>
+  </div>
+
+  <footer>完成版 v4.0 ／ モバイルアプリ技術要件定義書 準拠</footer>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="ov" id="ov"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title">
+  <div class="shd">
+    <div class="navrow">
+      <button class="navbtn" id="sh-prev" aria-label="前の日">‹</button>
+      <div class="mid"><h2 id="sh-title"></h2><div class="meta" id="sh-meta"></div></div>
+      <button class="navbtn" id="sh-next" aria-label="次の日">›</button>
+    </div>
+    <div id="sh-mile"></div>
+    <div class="hint">← 横にスワイプで前後の日 →</div>
+  </div>
+  <div class="sbody" id="sh-scroll">
+    <ul class="tl" id="sh-list"></ul>
+    <div class="memo">
+      <label for="sh-memo">一言メモ</label>
+      <textarea id="sh-memo" placeholder="今日の手応え、つまずき、明日に回すこと"></textarea>
+      <div class="save" id="sh-save"></div>
+    </div>
+    <div class="note" id="sh-note"></div>
+    <div style="text-align:center;margin-top:24px">
+      <button class="navbtn" id="sh-close" style="width:auto;padding:0 26px;height:50px;font-size:16px;font-weight:700">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ========== データ定義（日程変更はここだけ） ========== */
+const KEIKO=(function(){
+  const a=["08-01","08-03","08-05","08-08","08-17","08-19","08-22","08-31"];
+  for(let d=1;d<=23;d++){const wd=new Date(2026,8,d).getDay();
+    if(wd===1||wd===2||wd===3)a.push("09-"+String(d).padStart(2,"0"));}
+  return a;
+})();
+const CAMP=["08-25","08-26","08-27","08-28"];
+const INTERN=["09-07","09-08","09-09","09-10","09-11"];
+const EVENTS={
+  "08-03":{t:"(株)たけでん セミナー",time:"14:00-17:00",loc:"品川",keiko:true},
+  "08-05":{t:"イツモ防災 基礎研修",time:"10:00-16:00",loc:"北本",skip:"稽古は欠席"},
+  "08-21":{t:"ぼうさいゲームの日",time:"09:30-16:00",loc:"鴻巣"},
+  "09-01":{t:"防災インストラクター応用研修",time:"10:00-16:00",loc:"埼玉県防災学習センター",skip:"稽古は欠席"}
+};
+const EXAM={
+  "08-11":{n:"三陸特 CBT受験",after:"合格証明書を確認し、その足で免許申請（交付まで1〜2ヶ月）"},
+  "08-20":{n:"MOS Excel Associate 受験",after:"合否はその場で判明。学生証を忘れずに"},
+  "09-18":{n:"MOS Excel Expert 受験",after:"合否はその場で判明。不合格なら9/19以降で再受験"}
+};
+const MILES={
+  "08-02":"かすかべビジコン 考察スタート（応募締切 9/30）",
+  "08-07":"三陸特CBTを予約する（8/11の枠を確保）",
+  "08-11":"★ 三陸特 CBT受験 → 合格したら即日で免許申請",
+  "08-12":"MOS Associate 集中週スタート／8/20の受験を予約する",
+  "08-20":"★ MOS Excel Associate 受験",
+  "08-24":"MOS Expert を9/18で予約する",
+  "09-18":"★ MOS Excel Expert 受験",
+  "09-20":"ビジコン応募書類の仕上げ ／ 締切 9/30まで残り10日",
+  "09-23":"夏休み最終日 ／ 後期計画の再設定"
+};
+const BOOKS={
+  "08-02":"入社1年目ビジネスマナーの教科書","08-09":"業界と職種がわかる本",
+  "08-16":"完全独習 統計学入門","08-23":"Excelで学ぶ統計リテラシー",
+  "08-30":"生成AIのビジネス動向がよくわかる本","09-06":"アルゴリズムとデータ構造（前半のみ）",
+  "09-13":"市民社会とビジネス／経営組織論の展開","09-20":"データ分析の力／知性の罠"
+};
+/* 第11回かすかべビジネスプランコンテスト（応募締切 令和8年9月30日） */
+const BIZ={
+  "08-02":{t:"地域課題の棚卸し",d:"春日部の課題を10個書き出す。観察→列挙だけでよい"},
+  "08-09":{t:"部門の決定",d:"ビジネスプラン部門かアイディア部門か。1年生の勝ち筋で選ぶ"},
+  "08-16":{t:"顧客の特定",d:"誰の何を解決するのかを1文で言い切る"},
+  "08-23":{t:"解決策の選定",d:"ドローン／データ分析／Web制作のどれで解くかを決める"},
+  "08-30":{t:"収益モデル",d:"誰がいくら払うのか。地域資源の活用に紐づけて考える"},
+  "09-06":{t:"競合と差別化",d:"既存サービスとの違い。学生ならではの視点を言語化"},
+  "09-13":{t:"実現可能性の検証",d:"学生1人でどこまで検証できるか。小さく試す方法を書く"},
+  "09-20":{t:"応募書類の仕上げ",d:"提出版を作る。締切9/30まで残り10日"}
+};
+function phase(k){
+  if(k<="08-11")return{n:"三陸特",d:"過去問中心。法規 → 無線工学の順"};
+  if(k<="08-20")return{n:"MOS Excel Associate",d:"参考書をハイペースで1周 → 模擬試験プログラム2回以上"};
+  if(k<="09-18")return{n:"MOS Excel Expert",d:"FOM問題集を3周。模擬試験プログラム必須"};
+  return{n:"二等ドローン 学科",d:"教則 第5版 準拠の教材で。第4版の問題集は不可"};
+}
+function vocab(k){
+  if(k<="08-16")return{n:"ターゲット1200",d:"新規40語＋前日分の復習"};
+  if(k<="09-06")return{n:"ターゲット1900",d:"新規40語＋前日分の復習。Section1から順に"};
+  return{n:"金のフレーズ",d:"新規40語＋前日分の復習。TOEIC頻出語に接続"};
+}
+/* MOS Associate 集中週：午後をすべてExcelに */
+function intensive(k){return k>="08-12"&&k<="08-19";}
+const TRA={A:"腕立て10-15×3／斜め懸垂8-12×3／パイクプッシュアップ8-10×2／デッドバグ左右10×3／プランク40秒×3／サイドプランク左右30秒×2",
+           B:"四股20×3／スクワット15-20×3／ヒップリフト15×3／背筋12×3／カーフレイズ20×3／プランク45秒×2"};
+const TRAIN={};
+(function(){
+  const all=[];
+  for(let d=1;d<=31;d++)all.push(["08-"+String(d).padStart(2,"0"),new Date(2026,7,d).getDay()]);
+  for(let d=1;d<=23;d++)all.push(["09-"+String(d).padStart(2,"0"),new Date(2026,8,d).getDay()]);
+  const pick=[];
+  for(let i=0;i<all.length;i+=7){
+    const wk=all.slice(i,i+7).filter(function(o){const k=o[0],wd=o[1];
+      return wd!==0&&!EXAM[k]&&!EVENTS[k]&&CAMP.indexOf(k)<0&&INTERN.indexOf(k)<0&&KEIKO.indexOf(k)<0;});
+    if(wk.length<=3){wk.forEach(function(o){pick.push(o[0]);});}
+    else{[0,1,2].forEach(function(j){pick.push(wk[Math.round(j*(wk.length-1)/2)][0]);});}
+  }
+  pick.forEach(function(k,i){TRAIN[k]=(i%2===0)?"A":"B";});
+})();
+const C={eng:"var(--eng)",cert:"var(--cert)",body:"var(--body)",read:"var(--read)",biz:"var(--acc)",rest:"var(--rest)",free:"var(--free)"};
+
+function buildDay(k,wd){
+  const p=phase(k),v=vocab(k),ev=EVENTS[k],rows=[];let type,note="";
+  if(CAMP.indexOf(k)>-1){
+    type="合宿";
+    rows.push({t:"終日",c:"body",m:"合氣道部 合宿",s:"高強度。学習も筋トレも完全オフ",no:1});
+    rows.push({t:"移動中",c:"eng",m:"単語（任意）",s:"できれば30分。できなくてよい",g:"英語"});
+    note="ここで休むことがスケジュールの一部です。罪悪感を持たないこと。";
+    return{type,rows,note,p};
+  }
+  if(INTERN.indexOf(k)>-1){
+    type="インターン";
+    rows.push({t:"09:00",c:"body",m:"財務省関東財務局",s:"〜17:45／さいたま新都心合同庁舎1号館",no:1});
+    rows.push({t:"移動中",c:"eng",m:"単語："+v.n,s:"往復の車内で。新規なし・復習のみ",g:"英語"});
+    rows.push({t:"20:00",c:"eng",m:"ALC リスニング",s:"1〜2ユニット。負荷をかけない",g:"英語"});
+    rows.push({t:"21:00",c:"read",m:"今日の記録メモ",s:"10分。後期のESとゼミ報告に効きます",g:"読書"});
+    note="月火水の稽古は欠席。筋トレも全休。新規学習はしない。翌日に疲労を持ち越さないことが最優先です。";
+    return{type,rows,note,p};
+  }
+  if(EXAM[k]){
+    const x=EXAM[k];type="受験日";
+    rows.push({t:"09:00",c:"cert",m:"最終確認：模擬1回",s:"新しいことはやらない。間違えた箇所だけ潰す",g:"資格"});
+    rows.push({t:"11:00",c:"rest",m:"移動・昼食",s:"受験票・学生証・身分証を再確認",no:1});
+    rows.push({t:"14:00",c:"cert",m:"★ "+x.n,s:"会場へ",g:"資格"});
+    rows.push({t:"16:00",c:"cert",m:"受験後の手続き",s:x.after,g:"資格"});
+    rows.push({t:"18:00",c:"rest",m:"夕食・風呂",s:"",no:1});
+    rows.push({t:"20:00",c:"eng",m:"単語："+v.n,s:"復習のみ。頭を使わない作業に切り替える",g:"英語"});
+    note="受験日は筋トレを入れません。前日に夜更かしをしないこと。";
+    return{type,rows,note,p};
+  }
+  if(ev){
+    type="イベント日";
+    if(ev.keiko)rows.push({t:"10:00",c:"body",m:"合氣道部 稽古",s:"〜12:00",no:1});
+    rows.push({t:ev.time.split("-")[0],c:"body",m:ev.t,s:ev.time+"／"+ev.loc+(ev.skip?"（"+ev.skip+"）":""),no:1});
+    rows.push({t:"20:00",c:"eng",m:"単語："+v.n,s:"復習のみ・新規なし",g:"英語"});
+    rows.push({t:"21:00",c:intensive(k)?"cert":"eng",m:intensive(k)?p.n:"大岩の英文法",s:intensive(k)?"1時間。集中週は夜もExcel":"1講",g:intensive(k)?"資格":"英語"});
+    note="外出で消耗する日。夜2hで十分です。筋トレは入れない。";
+    return{type,rows,note,p};
+  }
+  if(wd===0){
+    type="安息日";
+    rows.push({t:"09:00",c:"read",m:"読書：「"+(BOOKS[k]||"予備")+"」",s:"前半3時間。読了より継続。章単位で止めてよい",g:"読書"});
+    rows.push({t:"12:00",c:"rest",m:"昼食・昼寝",s:"",no:1});
+    rows.push({t:"14:00",c:"read",m:"読書（続き）",s:"後半2時間。集中が切れたら切り上げてよい",g:"読書"});
+    const bz=BIZ[k];
+    if(bz)rows.push({t:"16:00",c:"biz",m:"かすかべビジコン："+bz.t,s:bz.d,g:"ビジコン"});
+    rows.push({t:"17:00",c:"read",m:"週次レビュー",s:"資格枠の進捗／単語・文法・ALCの消化／筋トレ回数／睡眠22:30-6:00",g:"読書"});
+    rows.push({t:"18:00",c:"rest",m:"以降は休息",s:"学習も筋トレもしない。翌週のための回復日です",no:1});
+    note="唯一の安息日。読書・ビジコン考察・週次レビューだけ。手を動かす学習は入れません。";
+    return{type,rows,note,p};
+  }
+  if(KEIKO.indexOf(k)>-1){
+    type="稽古日";
+    rows.push({t:"10:00",c:"body",m:"合氣道部 稽古",s:"〜12:00",no:1});
+    rows.push({t:"12:00",c:"rest",m:"昼食・昼寝を死守",s:"ここの睡眠が夜3hの質を決めます",no:1});
+    rows.push({t:"14:00",c:"free",m:"移動・自由",s:"",no:1});
+    rows.push({t:"19:00",c:"eng",m:"単語："+v.n,s:"復習のみ・新規なし",g:"英語"});
+    rows.push({t:"20:00",c:"cert",m:p.n,s:"1時間。稽古日でも資格枠は止めない",g:"資格"});
+    rows.push({t:"21:00",c:intensive(k)?"cert":"eng",m:intensive(k)?p.n+"（続き）":"大岩の英文法 または ALC",s:intensive(k)?"集中週は夜もExcel":"1講／2ユニット。疲労が強い日はALCだけでよい",g:intensive(k)?"資格":"英語"});
+    note="稽古前の朝は勉強しない。筋トレも入れない。";
+    return{type,rows,note,p};
+  }
+  type=intensive(k)?"MOS集中日":"フル日";
+  const tr=TRAIN[k],iv=intensive(k);
+  rows.push({t:"09:00",c:"eng",m:"単語："+v.n,s:v.d,g:"英語"});
+  rows.push({t:"10:00",c:"eng",m:"大岩の英文法",s:iv?"1講だけ。集中週は英語を最小限に":"2講",g:"英語"});
+  rows.push({t:"11:00",c:"cert",m:p.n,s:p.d,g:"資格"});
+  rows.push({t:"12:00",c:"rest",m:"昼食・昼寝",s:"",no:1});
+  if(tr)rows.push({t:"14:00",c:"body",m:"筋トレ "+tr+"日",s:TRA[tr],g:"筋トレ"});
+  else rows.push({t:"14:00",c:"free",m:"自由枠",s:"筋トレは週3回。この日は入れません",no:1});
+  rows.push({t:"15:00",c:"cert",m:p.n,s:"2時間。ここが本体です",g:"資格"});
+  if(iv)rows.push({t:"17:00",c:"cert",m:p.n+"（模擬試験）",s:"模擬試験プログラムを通しで。時間を計る",g:"資格"});
+  else rows.push({t:"17:00",c:"eng",m:"ハイパートレーニング Lv1",s:"1題 精読 → 音読10回。読んで終わりにしない",g:"英語"});
+  rows.push({t:"18:00",c:"rest",m:"夕食・風呂",s:"",no:1});
+  rows.push({t:"20:00",c:"cert",m:p.n,s:iv?"間違い直し。模擬の失点だけを潰す":"1時間。フル日は資格に4時間を配分します",g:"資格"});
+  rows.push({t:"21:00",c:"eng",m:"ALC NetAcademy 中級",s:iv?"2ユニット。英語はここだけ死守":"2ユニット。文法インプット＆アウトプットを優先",g:"英語"});
+  if(iv)note="MOS Associate 集中週。午後をすべてExcelに充てます。参考書1周＋模擬2回以上で8/20の受験へ。";
+  return{type,rows,note,p};
+}
+
+/* ========== 全日リスト ========== */
+const DAYS=[];
+(function(){
+  for(let d=1;d<=31;d++)DAYS.push({k:"08-"+String(d).padStart(2,"0"),m:8,d:d,wd:new Date(2026,7,d).getDay()});
+  for(let d=1;d<=23;d++)DAYS.push({k:"09-"+String(d).padStart(2,"0"),m:9,d:d,wd:new Date(2026,8,d).getDay()});
+})();
+const IDX={};DAYS.forEach((o,i)=>IDX[o.k]=i);
+
+/* ========== 保存（アプリ=端末保存 ／ プレビュー=クラウド） ========== */
+const KEY="summer2026-progress";let PROG={};
+async function load(){
+  if(typeof window.storage!=="undefined"&&window.storage){
+    try{const r=await window.storage.get(KEY);if(r&&r.value){PROG=JSON.parse(r.value);return;}}catch(e){}
+  }
+  try{const v=window.localStorage.getItem(KEY);if(v)PROG=JSON.parse(v);}catch(e){}
+}
+let timer=null;
+function save(msg){
+  clearTimeout(timer);
+  timer=setTimeout(async()=>{
+    const s=JSON.stringify(PROG);let ok=false;
+    try{window.localStorage.setItem(KEY,s);ok=true;}catch(e){}
+    if(typeof window.storage!=="undefined"&&window.storage){
+      try{await window.storage.set(KEY,s);ok=true;}catch(e){}
+    }
+    if(msg)msg.textContent=ok?"保存しました":"保存できませんでした";
+  },500);
+}
+
+/* ========== 進捗 ========== */
+function stats(list){
+  const g={"英語":[0,0],"資格":[0,0],"筋トレ":[0,0],"読書":[0,0],"ビジコン":[0,0]};let tot=0,dn=0;
+  list.forEach(o=>{
+    const day=buildDay(o.k,o.wd),p=PROG[o.k];
+    day.rows.forEach((r,i)=>{
+      if(!r.g)return;tot++;g[r.g][1]++;
+      if(p&&p.c&&p.c.indexOf(i)>-1){dn++;g[r.g][0]++;}
+    });
+  });
+  return{tot,dn,g,pct:tot?Math.round(dn/tot*100):0};
+}
+
+/* ========== 月表示 ========== */
+const cal=document.getElementById("cal");let curM=0;
+const MON=[{m:8,first:new Date(2026,7,1),len:31},{m:9,first:new Date(2026,8,1),len:30}];
+function inR(k){return k>="08-01"&&k<="09-23";}
+function renderMonth(){
+  const M=MON[curM];cal.innerHTML="";
+  for(let i=0;i<M.first.getDay();i++){const v=document.createElement("div");v.className="cell void";cal.appendChild(v);}
+  for(let d=1;d<=M.len;d++){
+    const k=String(M.m).padStart(2,"0")+"-"+String(d).padStart(2,"0"),wd=new Date(2026,M.m-1,d).getDay();
+    const b=document.createElement("button");
+    b.className="cell"+(wd===0?" sun":wd===6?" sat":"");
+    if(!inR(k)){b.classList.add("void");b.innerHTML='<span class="d" style="color:#3A4653">'+d+'</span>';cal.appendChild(b);continue;}
+    const day=buildDay(k,wd);
+    if(MILES[k])b.classList.add("mile");
+    if(day.type==="合宿"||day.type==="インターン")b.classList.add("off");
+    let bars="";day.rows.forEach(r=>{bars+='<i style="background:'+C[r.c]+';flex:'+((r.c==="rest"||r.c==="free")?1:1.6)+'"></i>';});
+    const p=PROG[k];
+    b.innerHTML='<span class="d">'+d+'</span><span class="bars">'+bars+'</span>'
+      +(MILES[k]?'<span class="mk">★</span>':'')
+      +((p&&((p.c&&p.c.length)||p.m))?'<span class="done"></span>':'');
+    b.setAttribute("aria-label",M.m+"月"+d+"日 "+day.type);
+    b.addEventListener("click",()=>openDay(IDX[k]));
+    cal.appendChild(b);
+  }
+}
+
+/* ========== 週表示 ========== */
+let curW=0;const WEEKS=[];
+for(let i=0;i<DAYS.length;i+=7)WEEKS.push(DAYS.slice(i,i+7));
+const WD=["日","月","火","水","木","金","土"];
+const GC={"英語":"var(--eng)","資格":"var(--cert)","筋トレ":"var(--body)","読書":"var(--read)","ビジコン":"var(--acc)"};
+function renderWeek(){
+  const w=WEEKS[curW],s=stats(w),all=stats(DAYS);
+  document.getElementById("wTitle").textContent="第"+(curW+1)+"週";
+  document.getElementById("wRange").textContent=w[0].m+"/"+w[0].d+" — "+w[w.length-1].m+"/"+w[w.length-1].d;
+  document.getElementById("wPct").innerHTML=s.pct+'<small>%</small>';
+  document.getElementById("wSub").textContent=s.dn+" / "+s.tot+" 項目　（全期間 "+all.pct+"%）";
+  document.getElementById("wPrev").disabled=(curW===0);
+  document.getElementById("wNext").disabled=(curW===WEEKS.length-1);
+  const gw=document.getElementById("wGoals");gw.innerHTML="";
+  ["資格","英語","筋トレ","読書","ビジコン"].forEach(n=>{
+    const a=all.g[n][0],b=all.g[n][1],pc=b?Math.round(a/b*100):0;
+    const el=document.createElement("div");el.className="goal";
+    el.innerHTML='<div class="gt"><div class="gn"><i class="sw" style="background:'+GC[n]+'"></i>'+n+'</div>'
+      +'<div class="gp" style="color:'+GC[n]+'">'+pc+'<small>%</small></div></div>'
+      +'<div class="bar"><i style="width:'+pc+'%;background:'+GC[n]+'"></i></div>'
+      +'<div class="gd">全期間 '+a+'/'+b+'　・　この週 '+s.g[n][0]+'/'+s.g[n][1]+'</div>';
+    gw.appendChild(el);
+  });
+  const dw=document.getElementById("wDays");dw.innerHTML="";
+  w.forEach(o=>{
+    const day=buildDay(o.k,o.wd),p=PROG[o.k]||{c:[]};
+    const n=day.rows.filter(r=>r.g).length;
+    const c=day.rows.filter((r,i)=>r.g&&p.c&&p.c.indexOf(i)>-1).length;
+    const b=document.createElement("button");
+    b.className="wkday"+(n&&c===n?" full":"");
+    b.innerHTML='<div class="wd1">'+o.m+'/'+o.d+'<span>'+WD[o.wd]+'</span></div>'
+      +'<div class="wd2"><b>'+day.type+(MILES[o.k]?' ★':'')+'</b><span>'
+      +((day.type==="安息日")?(BOOKS[o.k]||"読書"):"第1枠："+day.p.n)+'</span></div>'
+      +'<div class="wd3">'+(n?c+"/"+n:"—")+'</div>';
+    b.addEventListener("click",()=>openDay(IDX[o.k]));
+    dw.appendChild(b);
+  });
+}
+
+/* ========== 詳細モーダル ========== */
+const ov=document.getElementById("ov"),sheet=document.getElementById("sheet");
+const shT=document.getElementById("sh-title"),shM=document.getElementById("sh-meta");
+const shMile=document.getElementById("sh-mile"),shL=document.getElementById("sh-list");
+const shMemo=document.getElementById("sh-memo"),shSave=document.getElementById("sh-save");
+const shNote=document.getElementById("sh-note"),shScroll=document.getElementById("sh-scroll");
+let cur=0,lastFocus=null;
+function fill(dir){
+  const o=DAYS[cur],k=o.k,day=buildDay(k,o.wd);
+  if(!PROG[k])PROG[k]={c:[],m:""};
+  shT.textContent=o.m+"月"+o.d+"日（"+WD[o.wd]+"）";
+  const col={"フル日":"var(--acc)","MOS集中日":"var(--cert)","稽古日":"var(--body)","安息日":"var(--read)","イベント日":"var(--read)","受験日":"var(--acc)","合宿":"var(--mut)","インターン":"var(--mut)"}[day.type];
+  shM.innerHTML='<span class="chip" style="color:'+col+';border-color:'+col+'">'+day.type+'</span>'
+    +((day.type==="安息日"||day.type==="合宿")?'':'<span>第1資格枠：'+day.p.n+'</span>');
+  shMile.innerHTML=MILES[k]?'<div class="mile-bar">'+MILES[k]+'</div>':"";
+  shL.innerHTML="";
+  day.rows.forEach((r,i)=>{
+    const li=document.createElement("li"),on=PROG[k].c.indexOf(i)>-1;
+    if(on)li.classList.add("done");
+    const cb=document.createElement("button");
+    cb.className="cb"+(r.no?" na":"");cb.type="button";
+    cb.setAttribute("role","checkbox");cb.setAttribute("aria-checked",on?"true":"false");
+    cb.setAttribute("aria-label",r.m+" を完了にする");cb.textContent=on?"✓":"";
+    if(!r.no)cb.addEventListener("click",()=>{
+      const q=PROG[k].c.indexOf(i);
+      if(q>-1){PROG[k].c.splice(q,1);cb.setAttribute("aria-checked","false");cb.textContent="";li.classList.remove("done");}
+      else{PROG[k].c.push(i);cb.setAttribute("aria-checked","true");cb.textContent="✓";li.classList.add("done");}
+      save(shSave);renderMonth();if(wkOn())renderWeek();
+    });
+    const bar=document.createElement("span");bar.className="tbar";bar.style.background=C[r.c];
+    const tx=document.createElement("div");tx.className="tx1";
+    tx.innerHTML='<div class="m1"><time>'+r.t+'</time><span>'+r.m+'</span></div>'+(r.s?'<div class="m2">'+r.s+'</div>':'');
+    li.append(cb,bar,tx);shL.appendChild(li);
+  });
+  shMemo.value=PROG[k].m||"";
+  shMemo.oninput=()=>{PROG[k].m=shMemo.value;save(shSave);renderMonth();if(wkOn())renderWeek();};
+  shSave.textContent="";
+  shNote.textContent=day.note||"";shNote.style.display=day.note?"block":"none";
+  document.getElementById("sh-prev").disabled=(cur===0);
+  document.getElementById("sh-next").disabled=(cur===DAYS.length-1);
+  shScroll.scrollTop=0;
+  if(dir){shL.classList.remove("slideL","slideR");void shL.offsetWidth;shL.classList.add(dir>0?"slideL":"slideR");}
+}
+function openDay(i){
+  cur=i;lastFocus=document.activeElement;fill(0);
+  ov.classList.add("on");sheet.classList.add("on");document.body.style.overflow="hidden";
+  document.getElementById("sh-next").focus();
+}
+function closeDay(){
+  ov.classList.remove("on");sheet.classList.remove("on");document.body.style.overflow="";
+  if(lastFocus)lastFocus.focus();
+}
+function go(step){const n=cur+step;if(n<0||n>=DAYS.length)return;cur=n;fill(step);}
+document.getElementById("sh-close").addEventListener("click",closeDay);
+ov.addEventListener("click",closeDay);
+document.getElementById("sh-prev").addEventListener("click",()=>go(-1));
+document.getElementById("sh-next").addEventListener("click",()=>go(1));
+document.addEventListener("keydown",e=>{
+  if(!sheet.classList.contains("on"))return;
+  if(e.key==="Escape")closeDay();
+  if(e.key==="ArrowLeft")go(-1);
+  if(e.key==="ArrowRight")go(1);
+});
+let sx=0,sy=0,tracking=false;
+sheet.addEventListener("touchstart",e=>{
+  if(e.target.tagName==="TEXTAREA")return;
+  sx=e.touches[0].clientX;sy=e.touches[0].clientY;tracking=true;
+},{passive:true});
+sheet.addEventListener("touchend",e=>{
+  if(!tracking)return;tracking=false;
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.6)go(dx<0?1:-1);
+},{passive:true});
+
+/* ========== 表示切替・目標パネル ========== */
+function wkOn(){return document.getElementById("weekView").style.display!=="none";}
+function setView(w){
+  document.getElementById("monthView").style.display=w?"none":"block";
+  document.getElementById("weekView").style.display=w?"block":"none";
+  document.getElementById("vMonth").setAttribute("aria-pressed",!w);
+  document.getElementById("vWeek").setAttribute("aria-pressed",w);
+  if(w)renderWeek();else renderMonth();
+}
+document.getElementById("vMonth").addEventListener("click",()=>setView(false));
+document.getElementById("vWeek").addEventListener("click",()=>setView(true));
+document.getElementById("wPrev").addEventListener("click",()=>{if(curW>0){curW--;renderWeek();}});
+document.getElementById("wNext").addEventListener("click",()=>{if(curW<WEEKS.length-1){curW++;renderWeek();}});
+document.getElementById("b8").addEventListener("click",()=>{curM=0;syncM();});
+document.getElementById("b9").addEventListener("click",()=>{curM=1;syncM();});
+function syncM(){
+  document.getElementById("b8").setAttribute("aria-pressed",curM===0);
+  document.getElementById("b9").setAttribute("aria-pressed",curM===1);renderMonth();
+}
+const gb=document.getElementById("goalBtn"),gp=document.getElementById("goalPanel");
+gb.addEventListener("click",()=>{
+  const on=gp.classList.toggle("on");
+  gb.setAttribute("aria-expanded",on);
+  if(on)setTimeout(()=>gp.scrollIntoView({behavior:"smooth",block:"start"}),60);
+});
+
+/* ========== トースト ========== */
+const toastEl=document.getElementById("toast");let tT=null;
+function toast(msg){
+  toastEl.textContent=msg;toastEl.classList.add("on");
+  clearTimeout(tT);tT=setTimeout(()=>toastEl.classList.remove("on"),3200);
+}
+
+/* ========== インストール導線（要件 B-4 / B-5） ========== */
+let deferredInstallPrompt=null;
+function isStandalone(){
+  return (window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)
+    ||window.navigator.standalone===true;
+}
+function setupInstall(){
+  const bar=document.getElementById("installBar"),btn=document.getElementById("btn-install");
+  const hint=document.getElementById("instHint");
+  if(!bar||isStandalone())return;                       // インストール済みなら案内を出さない
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent||"");
+  window.addEventListener("beforeinstallprompt",e=>{    // Android Chrome
+    e.preventDefault();deferredInstallPrompt=e;bar.hidden=false;
+  });
+  window.addEventListener("appinstalled",()=>{bar.hidden=true;deferredInstallPrompt=null;});
+  if(isIOS){                                            // iOS は自動検知不可のため手順を案内
+    bar.hidden=false;
+    hint.textContent="共有ボタン →「ホーム画面に追加」で追加できます";
+    btn.textContent="手順";
+  }
+  btn.addEventListener("click",()=>{
+    if(deferredInstallPrompt){
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.then(()=>{deferredInstallPrompt=null;bar.hidden=true;});
+    }else if(isIOS){
+      toast("画面下の共有ボタン →「ホーム画面に追加」を選んでください");
+    }else{
+      toast("ブラウザのメニュー →「アプリをインストール」を選んでください");
+    }
+  });
+}
+
+/* ========== バックアップ（書き出し・読み込み） ========== */
+document.getElementById("btn-export").addEventListener("click",()=>{
+  try{
+    const blob=new Blob([JSON.stringify({app:"summer-dia",ver:4,data:PROG},null,1)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="夏休みダイヤ_記録.json";
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);
+    toast("記録を書き出しました");
+  }catch(e){toast("書き出しに失敗しました");}
+});
+document.getElementById("btn-import").addEventListener("click",()=>document.getElementById("fileIn").click());
+document.getElementById("fileIn").addEventListener("change",ev=>{
+  const f=ev.target.files&&ev.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const j=JSON.parse(rd.result);
+      const d=(j&&j.data)?j.data:j;
+      if(typeof d!=="object"||!d)throw new Error("bad");
+      Object.keys(d).forEach(k=>{PROG[k]=d[k];});      // 既存の記録は残したまま統合
+      save(null);renderMonth();if(wkOn())renderWeek();
+      toast("記録を読み込みました");
+    }catch(e){toast("読み込めませんでした。ファイル形式を確認してください");}
+    ev.target.value="";
+  };
+  rd.readAsText(f);
+});
+
+/* ========== 起動 ========== */
+(async()=>{await load();renderMonth();setupInstall();})();
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){
+  window.addEventListener("load",()=>{navigator.serviceWorker.register("./sw.js").catch(()=>{});});
+}
+</script>
+</body>
+</html>

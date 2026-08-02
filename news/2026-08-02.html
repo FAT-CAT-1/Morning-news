@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1319">
+<meta name="robots" content="noindex">
+<title>朝ニュース 2026-08-02</title>
+<style>
+  :root{
+    --bg:#0E1319; --card:#161D26; --line:#2A3644;
+    --text:#EDF2F7; --sub:#9AAABA; --accent:#2DD4BF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;overflow-x:hidden;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;
+    font-size:16px; line-height:1.7;
+    padding:env(safe-area-inset-top) 0 calc(32px + env(safe-area-inset-bottom));
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 14px;}
+  a{color:inherit;}
+
+  header{padding:20px 0 14px;border-bottom:1px solid var(--line);}
+  .date{font-size:20px;font-weight:700;margin:0;}
+  .summary{margin:6px 0 0;color:var(--accent);font-size:16px;font-weight:600;}
+  .vault{
+    margin:12px 0 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    color:var(--sub);font-size:14px;
+  }
+  .vault button{
+    min-height:44px;padding:0 14px;border-radius:10px;
+    background:transparent;border:1px solid var(--line);color:var(--sub);
+    font-size:14px;cursor:pointer;
+  }
+
+  .domain{margin:26px 0 0;}
+  .domain-title{
+    display:flex;align-items:center;gap:10px;
+    margin:0 0 10px;font-size:18px;font-weight:700;color:var(--domain);
+    border-left:4px solid var(--domain);padding-left:10px;
+  }
+  .count{
+    margin-left:auto;font-size:13px;font-weight:600;color:var(--sub);
+    border:1px solid var(--line);border-radius:999px;padding:2px 10px;
+  }
+
+  .articles{list-style:none;margin:0;padding:0;}
+  .article{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px;margin:0 0 12px;
+  }
+  .headline{
+    display:block;font-size:17px;font-weight:700;line-height:1.55;
+    text-decoration:none;overflow-wrap:anywhere;
+  }
+  .meta{margin:6px 0 0;color:var(--sub);font-size:13px;}
+  .lead{margin:8px 0 0;color:var(--sub);font-size:16px;line-height:1.75;overflow-wrap:anywhere;}
+
+  .actions{display:flex;gap:10px;margin-top:12px;}
+  .btn{
+    min-height:44px;flex:1;border-radius:12px;font-size:15px;font-weight:700;
+    cursor:pointer;border:1px solid var(--line);
+  }
+  .btn-primary{background:var(--accent);color:#08201D;border-color:var(--accent);}
+  .btn-ghost{background:transparent;color:var(--sub);flex:0 0 96px;}
+  .btn:active{opacity:.75;}
+
+  .empty{
+    margin:0;padding:16px 14px;background:var(--card);
+    border:1px dashed var(--line);border-radius:14px;
+    color:var(--sub);font-weight:700;
+  }
+  .empty-detail{margin:8px 0 0;color:var(--sub);font-size:13px;line-height:1.7;}
+
+  .external{
+    display:block;min-height:44px;line-height:44px;margin-top:6px;
+    text-align:center;border:1px solid var(--domain);border-radius:12px;
+    color:var(--domain);text-decoration:none;font-size:15px;font-weight:600;
+  }
+
+  .prep{margin:30px 0 0;padding:16px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;}
+  .prep h2{margin:0 0 6px;font-size:17px;}
+  .prep p{margin:0 0 12px;color:var(--sub);font-size:14px;}
+
+  .status,.archive{margin:28px 0 0;}
+  .status-title{margin:0 0 8px;font-size:14px;color:var(--sub);font-weight:600;}
+  .status-list{list-style:none;margin:0;padding:0;font-size:13px;}
+  .status-list li{
+    display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;
+    padding:7px 0;border-bottom:1px solid var(--line);color:var(--sub);
+  }
+  .st-name{flex:1 1 auto;overflow-wrap:anywhere;}
+  .st-label{font-weight:600;}
+  .st-ok .st-label{color:var(--accent);}
+  .st-empty .st-label{color:var(--sub);}
+  .st-error .st-label{color:#FF6B7C;}
+  .st-detail{flex:1 0 100%;color:#FF6B7C;}
+
+  .archive-links{display:flex;flex-wrap:wrap;gap:8px;}
+  .archive-links a{
+    min-height:44px;line-height:44px;padding:0 12px;
+    border:1px solid var(--line);border-radius:10px;
+    color:var(--sub);text-decoration:none;font-size:14px;
+  }
+
+  footer{margin:26px 0 0;color:var(--sub);font-size:12px;line-height:1.8;}
+
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+    background:var(--card);border:1px solid var(--accent);color:var(--text);
+    padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;
+    opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+    max-width:calc(100vw - 32px);text-align:center;z-index:10;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="date">2026年8月2日(日) 朝ニュース</h1>
+    <p class="summary">全18件 ／ 想定 18分</p>
+    <p class="vault">
+      <span id="vault-label">Vault: 未設定</span>
+      <button type="button" id="vault-set">変更</button>
+    </p>
+  </header>
+
+  <main>
+      <section class="domain" style="--domain:#6EE07A">
+        <h2 class="domain-title">ドローン<span class="count">0</span></h2>
+        <p class="empty">本日取得できず</p><p class="empty-detail">DRONE.jp：新着なし<br>ドローンプレス：新着なし<br>ドローンジャーナル：新着なし<br>KDDIスマートドローン：新着なし</p>
+        
+      </section>
+      <section class="domain" style="--domain:#B088F7">
+        <h2 class="domain-title">AI技術<span class="count">5</span></h2>
+        <ol class="articles">
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMiVEFVX3lxTFA5NnE0bkdRU1pRNlc1aHM1RFJzci0wNmpOZ28xRVRuVFJBa2dSU25jb1I5TW5ub1d6TjZuaE9qbVh0WldRV2dwQUwzX2N5UGUwSXF4ag?oc=5" target="_blank" rel="noopener">漫画家はAIに仕事を取られる？瀧波ユカリ氏「私の場合はそれほど」「背景が上手すぎて使えない」現場のリアルを明かす</a>
+          <p class="meta">ABEMA TIMES・13:30</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="0">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="0">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTE94Y1ZzSWNfSi0tWnYwVDdDMzVZMEp3TGhITFpVZTNGdkJfQmlQb1hSM0ZUaW5qaDN2Z1dwUm5BYk5ONE4wQnB2VUlibXhsRXJmR1hSdERNaks2WGd2ekhkTjYzcU1CQkk?oc=5" target="_blank" rel="noopener">自分と妻の歌声をAIボーカルシンセ「DiffSinger」に進化させた。もうボイチェン不要。アルゴリズムベースの自動作曲ソフトとも統合（CloseBox）</a>
+          <p class="meta">テクノエッジ TechnoEdge・11:25</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="1">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="1">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMiREFVX3lxTE01MndVOHJqT01jR2VHVExLYmpqQlI2ei00LVd1ZGstVnUxQ0xVQkk4U0YzYVE3RkdGQ093Qm1EZVRUZjha?oc=5" target="_blank" rel="noopener">What AI Colorization of War Photographs Obscures: From a Gender Perspective AIによる戦争写真のカラー化が覆うもの――ジェンダーの視点から</a>
+          <p class="meta">Asia-Pacific Journal: Japan Focus・11:13</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="2">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="2">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMiW0FVX3lxTFBwbVNfOXpDbnpjRk51d25rRVRfaEE4aHRUa1YwVHlfc2hNOGVtQXpWbURLcWxHTGlwakNvR3pNWFo1Znd1NEwzX1pUZEVjZW1VR1BJaGpmUGowMGM?oc=5" target="_blank" rel="noopener">グラファー、「大阪府行政AIエージェントコンソーシアム」に参画</a>
+          <p class="meta">朝日新聞・11:05</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="3">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="3">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMiS0FVX3lxTE9kWlJsbFo4eGFna0pEdUlPSno3bGtsUnRpb3lrLURVRTZkSVJKRWFyejRlQlpwMkI0aDJDN1N4dVBUa2R2TVozVTNBUQ?oc=5" target="_blank" rel="noopener">中国で職業教育ブーム AI・ロボット関連学科に志願者殺到</a>
+          <p class="meta">中国経済新聞・08:30</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="4">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="4">コピー</button>
+          </div>
+        </li>
+      </ol>
+        <a class="external" href="https://www.perplexity.ai/discover" target="_blank" rel="noopener">Perplexity Discover で深掘りする ↗</a>
+      </section>
+      <section class="domain" style="--domain:#4BA6F0">
+        <h2 class="domain-title">世界情勢<span class="count">5</span></h2>
+        <ol class="articles">
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMiggFBVV95cUxNdVRoUENaanlPdmRnOG5jRTNaN1JZS2YxajNmS3duTVMxQmxrVjJtRmRQUVRsamc0QWIxREpfUVgtODlJSGlTVmowOUFUd090dEpFbHJZMUNtR3B4SzA4VWNrZEQ4MEdKbjFHZFRrYjVXb0NDOW1ZaGJMdHd0elk5cnRn?oc=5" target="_blank" rel="noopener">スペイン、移民流入防止へ海上フェンス設置 少なくとも67人死亡</a>
+          <p class="meta">ロイター・13:01</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="5">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="5">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMiekFVX3lxTE9xOHNNVXdpZFVKRU5RT1kyd181UXR3TkNyM3VfQi1CcnlLckFWVWJlc1I2S0UzcHQtTjJ6ZF90cW95WHY0X3pxS1lOM1pvdDBMZzcyM1hrMG9TTElmbkU4VmlpU1Z2Tk5CcjY2WXU0SXpDczVNb0M1ZzNn?oc=5" target="_blank" rel="noopener">トランプ大統領、イラン攻撃見送りと表明 ホルムズ開放と核開発巡り迅速な合意求める</a>
+          <p class="meta">ロイター・12:11</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="6">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="6">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMifkFVX3lxTE85cWRHNGFkQzJqUTJxd1h6OVFQS2N5bTdQVVduVlNuNHhBM3hUbnJyV01CQVhoRFp6N2h2WlJscE1XUDdXQnVBcUd3YUxmc0J4eDFjMWkzbmVCNXZwMXdtUW15bHdsMUgyekh3WGl4Mno3WkVMV2lFbmhRYmY0QQ?oc=5" target="_blank" rel="noopener">アングル：中国の若者に広がる「ベッドシェアリング」、経済的苦境を象徴</a>
+          <p class="meta">ロイター・09:47</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="7">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="7">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMiggFBVV95cUxPbko5TXBwdWx4STJIWU4tTnk4bHppbEQtWDlJU3B5TnRUZ3MzdmVVay1tcWliNkhhd1N3NzRrNjNldmNFSmg0ZzlVSjVwWTk1a3lwUXpzYldwdXdLLVRpbFJ2TllVbnpqS2drWnF4QVRlUjA0M2t3SVE2NnBoN0ZJUjlB?oc=5" target="_blank" rel="noopener">オマーン沖でタンカー2件の被害報告＝ＵＫＭＴＯ</a>
+          <p class="meta">ロイター・16:34</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="8">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="8">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="https://news.google.com/rss/articles/CBMigAFBVV95cUxNNW1MNzFieHhvZFYxRVNYRlBNYlZGMnpHS3Bkem1QeG5wc0tROEtKZllTS3ZTM1pfcmlKbDVYUDZ4X2ZRa0VQNVZSaWNCN3JZNWxERTNrSFpYcDJBUmlGaVR2RklqT1ZWcldMM0JVYXQwSTNGMllucDNwbVQzV0Q5bA?oc=5" target="_blank" rel="noopener">ロシア軍がキーウにミサイル攻撃、少なくとも9人死亡</a>
+          <p class="meta">ロイター・16:14</p>
+          
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="9">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="9">コピー</button>
+          </div>
+        </li>
+      </ol>
+        
+      </section>
+      <section class="domain" style="--domain:#FFB13D">
+        <h2 class="domain-title">国内政治<span class="count">5</span></h2>
+        <ol class="articles">
+        <li class="article">
+          <a class="headline" href="http://www3.nhk.or.jp/news/html/20260802/k10015194131000.html" target="_blank" rel="noopener">消費税減税 財源は予算編成過程で明確に 城内成長戦略相</a>
+          <p class="meta">NHKニュース 政治・12:46</p>
+          <p class="lead">高市総理大臣が表明した食料品の消費税減税の方針について、城内成長戦略担当大臣は、NHKの日曜討論で、物価高が続く中、特に中低所得の人の負担軽減を図るねらいがあるとした上で、財源は来年度の予算編成過程で…</p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="10">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="10">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="http://www3.nhk.or.jp/news/html/20260802/k10015194031000.html" target="_blank" rel="noopener">防衛省 国際連携関係の政策を担う局の新設を調整</a>
+          <p class="meta">NHKニュース 政治・11:08</p>
+          <p class="lead">防衛省はことしの「骨太の方針」を踏まえ組織を見直す検討を本格化させていて、国際連携に関する政策を担う局を新設する方向で調整しています。各国との防衛協力の推進に向けた体制を強化することで複雑化する安全保…</p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="11">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="11">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="http://www3.nhk.or.jp/news/html/20260802/k10015193871000.html" target="_blank" rel="noopener">熊本地震 断水の早期解消へ復旧の取り組み進める 政府</a>
+          <p class="meta">NHKニュース 政治・05:39</p>
+          <p class="lead">今回の地震を受け、政府は、被災地で続く断水の早期解消に向けて全国の自治体に技術職員の派遣を要請するなど、インフラ復旧の取り組みを進めることにしています。</p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="12">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="12">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="http://www3.nhk.or.jp/news/html/20260801/k10015193661000.html" target="_blank" rel="noopener">熊本地震 酷暑日予想で避難所にクーラーなど必要物資 高市首相</a>
+          <p class="meta">NHKニュース 政治・18:02</p>
+          <p class="lead">今回の地震を受けて、高市総理大臣は、今後、被災地で「酷暑日」が予想されるとして、避難所にクーラーや保冷シートなど、必要な物資を届ける取り組みを進める考えを示しました。</p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="13">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="13">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="http://www3.nhk.or.jp/news/html/20260801/k10015193631000.html" target="_blank" rel="noopener">自民 小林政調会長 消費税減税 政府基本方針案で意見集約を</a>
+          <p class="meta">NHKニュース 政治・17:45</p>
+          <p class="lead">食料品の消費税減税をめぐり、自民党の小林政務調査会長は、来年4月から2年間、税率を1％に引き下げるなどとした政府の基本方針案に沿って党内の意見集約を図りたいという考えを示した上で、必要な財源は、歳入や…</p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="14">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="14">コピー</button>
+          </div>
+        </li>
+      </ol>
+        
+      </section>
+      <section class="domain" style="--domain:#F5D76E">
+        <h2 class="domain-title">物価・株価<span class="count">3</span></h2>
+        <ol class="articles">
+        <li class="article">
+          <a class="headline" href="http://www3.nhk.or.jp/news/html/20260801/k10015193711000.html" target="_blank" rel="noopener">円相場 再び円高方向に 円安是正で日米が異例の協調対応か</a>
+          <p class="meta">NHKニュース 経済・20:15</p>
+          <p class="lead">政府・日銀は、歴史的な円安に歯止めをかけるため日本時間の30日夜に市場介入に踏み切りましたが、31日夕方から1日未明にかけても急激に円高方向に動く場面が相次ぎました。アメリカの通貨当局が異例の協調対応…</p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="15">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="15">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="http://www3.nhk.or.jp/news/html/20260801/k10015193321000.html" target="_blank" rel="noopener">【熊本地震 企業影響 1日】工場・店舗の状況は 再開の動きも</a>
+          <p class="meta">NHKニュース 経済・19:04</p>
+          <p class="lead">今回の地震の影響で、九州にある大手メーカーの工場などでは操業に影響が出ています。</p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="16">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="16">コピー</button>
+          </div>
+        </li>
+        <li class="article">
+          <a class="headline" href="http://www3.nhk.or.jp/news/html/20260801/k10015193571000.html" target="_blank" rel="noopener">被災地のコンビニで飲料などの需要高まる 店舗への配送強化</a>
+          <p class="meta">NHKニュース 経済・16:36</p>
+          <p class="lead">熊本県内のコンビニエンスストアでは、地震のあと飲料やおにぎりなどの需要が高まっていて、各社とも商品をきらさないよう、輸送体制を強化するなどの対応をとっています。</p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="17">Obsidianに書く</button>
+            <button type="button" class="btn btn-ghost" data-act="copy" data-idx="17">コピー</button>
+          </div>
+        </li>
+      </ol>
+        
+      </section>
+
+    <section class="prep">
+      <h2>今日のPREPノート</h2>
+      <p>記事を選ばず自分で書くときはこちら。日付だけ入った枠を作る。</p>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" data-act="obsidian" data-idx="blank">Obsidianに書く</button>
+        <button type="button" class="btn btn-ghost" data-act="copy" data-idx="blank">コピー</button>
+      </div>
+    </section>
+
+    
+      <section class="status">
+        <h2 class="status-title">ソースの状態</h2>
+        <ul class="status-list"><li class="st-empty"><span class="st-name">DRONE.jp</span><span class="st-label">本日取得できず</span></li><li class="st-empty"><span class="st-name">ドローンプレス</span><span class="st-label">本日取得できず</span></li><li class="st-empty"><span class="st-name">ドローンジャーナル</span><span class="st-label">本日取得できず</span></li><li class="st-empty"><span class="st-name">KDDIスマートドローン</span><span class="st-label">本日取得できず</span></li><li class="st-ok"><span class="st-name">AI技術動向（Google News）</span><span class="st-label">27件</span></li><li class="st-ok"><span class="st-name">Reuters（Google News経由）</span><span class="st-label">7件</span></li><li class="st-ok"><span class="st-name">NHKニュース 政治</span><span class="st-label">5件</span></li><li class="st-ok"><span class="st-name">NHKニュース 経済</span><span class="st-label">3件</span></li></ul>
+      </section>
+    
+  </main>
+
+  <footer>
+    生成：2026-08-02 05:30 JST ／ 期間フィルタ 24時間<br>
+    見出しの下の文章は各媒体が書いたリードです。こちらで作った要約ではありません。
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="application/json" id="news-data">[{"title":"漫画家はAIに仕事を取られる？瀧波ユカリ氏「私の場合はそれほど」「背景が上手すぎて使えない」現場のリアルを明かす","url":"https://news.google.com/rss/articles/CBMiVEFVX3lxTFA5NnE0bkdRU1pRNlc1aHM1RFJzci0wNmpOZ28xRVRuVFJBa2dSU25jb1I5TW5ub1d6TjZuaE9qbVh0WldRV2dwQUwzX2N5UGUwSXF4ag?oc=5","domain":"AI技術","source":"ABEMA TIMES"},{"title":"自分と妻の歌声をAIボーカルシンセ「DiffSinger」に進化させた。もうボイチェン不要。アルゴリズムベースの自動作曲ソフトとも統合（CloseBox）","url":"https://news.google.com/rss/articles/CBMiZ0FVX3lxTE94Y1ZzSWNfSi0tWnYwVDdDMzVZMEp3TGhITFpVZTNGdkJfQmlQb1hSM0ZUaW5qaDN2Z1dwUm5BYk5ONE4wQnB2VUlibXhsRXJmR1hSdERNaks2WGd2ekhkTjYzcU1CQkk?oc=5","domain":"AI技術","source":"テクノエッジ TechnoEdge"},{"title":"What AI Colorization of War Photographs Obscures: From a Gender Perspective AIによる戦争写真のカラー化が覆うもの――ジェンダーの視点から","url":"https://news.google.com/rss/articles/CBMiREFVX3lxTE01MndVOHJqT01jR2VHVExLYmpqQlI2ei00LVd1ZGstVnUxQ0xVQkk4U0YzYVE3RkdGQ093Qm1EZVRUZjha?oc=5","domain":"AI技術","source":"Asia-Pacific Journal: Japan Focus"},{"title":"グラファー、「大阪府行政AIエージェントコンソーシアム」に参画","url":"https://news.google.com/rss/articles/CBMiW0FVX3lxTFBwbVNfOXpDbnpjRk51d25rRVRfaEE4aHRUa1YwVHlfc2hNOGVtQXpWbURLcWxHTGlwakNvR3pNWFo1Znd1NEwzX1pUZEVjZW1VR1BJaGpmUGowMGM?oc=5","domain":"AI技術","source":"朝日新聞"},{"title":"中国で職業教育ブーム AI・ロボット関連学科に志願者殺到","url":"https://news.google.com/rss/articles/CBMiS0FVX3lxTE9kWlJsbFo4eGFna0pEdUlPSno3bGtsUnRpb3lrLURVRTZkSVJKRWFyejRlQlpwMkI0aDJDN1N4dVBUa2R2TVozVTNBUQ?oc=5","domain":"AI技術","source":"中国経済新聞"},{"title":"スペイン、移民流入防止へ海上フェンス設置 少なくとも67人死亡","url":"https://news.google.com/rss/articles/CBMiggFBVV95cUxNdVRoUENaanlPdmRnOG5jRTNaN1JZS2YxajNmS3duTVMxQmxrVjJtRmRQUVRsamc0QWIxREpfUVgtODlJSGlTVmowOUFUd090dEpFbHJZMUNtR3B4SzA4VWNrZEQ4MEdKbjFHZFRrYjVXb0NDOW1ZaGJMdHd0elk5cnRn?oc=5","domain":"世界情勢","source":"ロイター"},{"title":"トランプ大統領、イラン攻撃見送りと表明 ホルムズ開放と核開発巡り迅速な合意求める","url":"https://news.google.com/rss/articles/CBMiekFVX3lxTE9xOHNNVXdpZFVKRU5RT1kyd181UXR3TkNyM3VfQi1CcnlLckFWVWJlc1I2S0UzcHQtTjJ6ZF90cW95WHY0X3pxS1lOM1pvdDBMZzcyM1hrMG9TTElmbkU4VmlpU1Z2Tk5CcjY2WXU0SXpDczVNb0M1ZzNn?oc=5","domain":"世界情勢","source":"ロイター"},{"title":"アングル：中国の若者に広がる「ベッドシェアリング」、経済的苦境を象徴","url":"https://news.google.com/rss/articles/CBMifkFVX3lxTE85cWRHNGFkQzJqUTJxd1h6OVFQS2N5bTdQVVduVlNuNHhBM3hUbnJyV01CQVhoRFp6N2h2WlJscE1XUDdXQnVBcUd3YUxmc0J4eDFjMWkzbmVCNXZwMXdtUW15bHdsMUgyekh3WGl4Mno3WkVMV2lFbmhRYmY0QQ?oc=5","domain":"世界情勢","source":"ロイター"},{"title":"オマーン沖でタンカー2件の被害報告＝ＵＫＭＴＯ","url":"https://news.google.com/rss/articles/CBMiggFBVV95cUxPbko5TXBwdWx4STJIWU4tTnk4bHppbEQtWDlJU3B5TnRUZ3MzdmVVay1tcWliNkhhd1N3NzRrNjNldmNFSmg0ZzlVSjVwWTk1a3lwUXpzYldwdXdLLVRpbFJ2TllVbnpqS2drWnF4QVRlUjA0M2t3SVE2NnBoN0ZJUjlB?oc=5","domain":"世界情勢","source":"ロイター"},{"title":"ロシア軍がキーウにミサイル攻撃、少なくとも9人死亡","url":"https://news.google.com/rss/articles/CBMigAFBVV95cUxNNW1MNzFieHhvZFYxRVNYRlBNYlZGMnpHS3Bkem1QeG5wc0tROEtKZllTS3ZTM1pfcmlKbDVYUDZ4X2ZRa0VQNVZSaWNCN3JZNWxERTNrSFpYcDJBUmlGaVR2RklqT1ZWcldMM0JVYXQwSTNGMllucDNwbVQzV0Q5bA?oc=5","domain":"世界情勢","source":"ロイター"},{"title":"消費税減税 財源は予算編成過程で明確に 城内成長戦略相","url":"http://www3.nhk.or.jp/news/html/20260802/k10015194131000.html","domain":"国内政治","source":"NHKニュース 政治"},{"title":"防衛省 国際連携関係の政策を担う局の新設を調整","url":"http://www3.nhk.or.jp/news/html/20260802/k10015194031000.html","domain":"国内政治","source":"NHKニュース 政治"},{"title":"熊本地震 断水の早期解消へ復旧の取り組み進める 政府","url":"http://www3.nhk.or.jp/news/html/20260802/k10015193871000.html","domain":"国内政治","source":"NHKニュース 政治"},{"title":"熊本地震 酷暑日予想で避難所にクーラーなど必要物資 高市首相","url":"http://www3.nhk.or.jp/news/html/20260801/k10015193661000.html","domain":"国内政治","source":"NHKニュース 政治"},{"title":"自民 小林政調会長 消費税減税 政府基本方針案で意見集約を","url":"http://www3.nhk.or.jp/news/html/20260801/k10015193631000.html","domain":"国内政治","source":"NHKニュース 政治"},{"title":"円相場 再び円高方向に 円安是正で日米が異例の協調対応か","url":"http://www3.nhk.or.jp/news/html/20260801/k10015193711000.html","domain":"物価・株価","source":"NHKニュース 経済"},{"title":"【熊本地震 企業影響 1日】工場・店舗の状況は 再開の動きも","url":"http://www3.nhk.or.jp/news/html/20260801/k10015193321000.html","domain":"物価・株価","source":"NHKニュース 経済"},{"title":"被災地のコンビニで飲料などの需要高まる 店舗への配送強化","url":"http://www3.nhk.or.jp/news/html/20260801/k10015193571000.html","domain":"物価・株価","source":"NHKニュース 経済"}]</script>
+<script>
+(function () {
+  "use strict";
+  var DATE = "2026-08-02";
+  var ARTICLES = JSON.parse(document.getElementById("news-data").textContent);
+  var VAULT_KEY = "morning-news:vault";
+
+  // ── Vault名（初回だけ聞いて localStorage に残す） ────────────────
+  function getVault() {
+    try { return localStorage.getItem(VAULT_KEY) || ""; } catch (e) { return ""; }
+  }
+  function setVault(v) {
+    try { localStorage.setItem(VAULT_KEY, v); } catch (e) {}
+  }
+  function paintVault() {
+    var v = getVault();
+    document.getElementById("vault-label").textContent = "Vault: " + (v || "未設定");
+  }
+  function askVault(force) {
+    var current = getVault();
+    if (current && !force) return current;
+    // 画面に入力欄は置かない方針なので prompt で受ける
+    var v = window.prompt("ObsidianのVault名を入力してください（初回のみ）", current || "");
+    if (v === null) return current;
+    v = v.trim();
+    if (v) { setVault(v); paintVault(); }
+    return v || current;
+  }
+
+  // ── Obsidianに生成するMarkdown（枠だけ。中身はObsidianで書く） ──
+  function buildMarkdown(a) {
+    return [
+      "---",
+      "date: " + DATE,
+      "domain: " + (a ? a.domain : ""),
+      "source: " + (a ? a.source : ""),
+      "url: " + (a ? a.url : ""),
+      "tags: [news, 就活ネタ]",
+      "---",
+      "",
+      "# " + (a ? a.title : ""),
+      "",
+      "## 事実",
+      "（何が起きたか。2〜3行。自分の解釈を混ぜない）",
+      "",
+      "## 意見（PREP・300字）",
+      "**P：**",
+      "**R：**",
+      "**E：**",
+      "**P：**",
+      "",
+      "## 面接での使いどころ",
+      ""
+    ].join("\n");
+  }
+
+  function fileName(a) {
+    return a ? "news/" + DATE + "_" + a.domain + ".md" : "news/" + DATE + ".md";
+  }
+
+  // ── トースト ────────────────────────────────────────────────
+  var toastEl = document.getElementById("toast");
+  var toastTimer = null;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 2400);
+  }
+
+  // ── クリップボード（保険。URI失敗時とPC閲覧時） ──────────────
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.top = "-1000px";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      ok ? resolve() : reject(new Error("copy failed"));
+    });
+  }
+
+  function copyWithToast(md, okMsg) {
+    copyText(md).then(
+      function () { toast(okMsg); },
+      function () { toast("コピーできませんでした"); }
+    );
+  }
+
+  // ── Obsidianを開く。開けなければクリップボードへ落とす ────────
+  function openObsidian(a) {
+    var vault = askVault(false);
+    var md = buildMarkdown(a);
+    if (!vault) {
+      copyWithToast(md, "Vault未設定のためコピーしました");
+      return;
+    }
+    var uri = "obsidian://new"
+      + "?vault=" + encodeURIComponent(vault)
+      + "&file=" + encodeURIComponent(fileName(a))
+      + "&content=" + encodeURIComponent(md);
+
+    // アプリに切り替わったかを可視状態で判定する。
+    // 切り替わらなければURIが効かない環境（PCブラウザ等）なのでコピーに落とす。
+    var left = false;
+    function onHide() { if (document.hidden) left = true; }
+    document.addEventListener("visibilitychange", onHide);
+    window.addEventListener("pagehide", onHide);
+
+    try {
+      window.location.href = uri;
+    } catch (e) {
+      left = false;
+    }
+
+    setTimeout(function () {
+      document.removeEventListener("visibilitychange", onHide);
+      window.removeEventListener("pagehide", onHide);
+      if (!left && !document.hidden) {
+        copyWithToast(md, "Obsidianを開けないためコピーしました");
+      }
+    }, 1500);
+  }
+
+  // ── ボタン（イベント委譲） ──────────────────────────────────
+  document.addEventListener("click", function (ev) {
+    var btn = ev.target.closest ? ev.target.closest("button[data-act]") : null;
+    if (!btn) return;
+    var idx = btn.getAttribute("data-idx");
+    var a = idx === "blank" ? null : ARTICLES[Number(idx)];
+    if (idx !== "blank" && !a) return;
+
+    if (btn.getAttribute("data-act") === "obsidian") {
+      openObsidian(a);
+    } else {
+      copyWithToast(buildMarkdown(a), "コピーしました");
+    }
+  });
+
+  document.getElementById("vault-set").addEventListener("click", function () { askVault(true); });
+  paintVault();
+
+  // 直接 /news/ を開いた場合でもオフラインで読めるようにSWを登録する（NFR-T-04）
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("../sw.js").catch(function () {});
+    });
+  }
+})();
+</script>
+</body>
+</html>
