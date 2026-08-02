@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="朝ニュース">
+  <rect width="512" height="512" fill="#0E1319"/>
+  <g>
+  <rect x="76.8" y="76.8" width="358.4" height="39.8" rx="16.7" fill="#6EE07A"/>
+  <rect x="76.8" y="156.4" width="250.9" height="39.8" rx="16.7" fill="#B088F7"/>
+  <rect x="76.8" y="236.1" width="315.4" height="39.8" rx="16.7" fill="#4BA6F0"/>
+  <rect x="76.8" y="315.7" width="197.1" height="39.8" rx="16.7" fill="#FFB13D"/>
+  <rect x="76.8" y="395.4" width="279.6" height="39.8" rx="16.7" fill="#F5D76E"/>
+  </g>
+</svg>

@@ -146,6 +146,18 @@ function renderPage({ dateKey, dateLabel, sections, sourceStatus, total, windowH
 <meta name="theme-color" content="#0E1319">
 <meta name="robots" content="noindex">
 <title>朝ニュース ${escapeHtml(dateKey)}</title>
+
+<!-- ホーム画面に「朝ニュース」として単体でインストールできるようにする。
+     夏休みダイヤとは start_url が違うので、2つ並んで入る。 -->
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="朝ニュース">
+<!-- black-translucent は本文がステータスバー下に回り込むが、
+     body 側で env(safe-area-inset-top) を確保してあるので重ならない -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
   :root{
     --bg:#0E1319; --card:#161D26; --line:#2A3644;

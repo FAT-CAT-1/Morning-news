@@ -1,5 +1,5 @@
 /* アプリシェル（HTML/JS/アイコン一式）をキャッシュしてオフライン動作させる */
-const CACHE = "summer-dia-v5";
+const CACHE = "summer-dia-v6";
 
 /* 夏休みダイヤ本体（アプリシェル）。中身が変わらないのでキャッシュ優先でよい。 */
 const SHELL = [
@@ -7,14 +7,21 @@ const SHELL = [
   "./icon.svg", "./icon-180.png", "./icon-192.png", "./icon-512.png"
 ];
 
-/* 朝ニュース。毎朝内容が変わるのでネットワーク優先にする（電車内では最後に読めた号が出る）。 */
-const NEWS = ["./news/", "./news/index.html"];
+/* 朝ニュース。単体でインストールできるよう、専用のmanifestとアイコンを持つ。 */
+const NEWS = [
+  "./news/", "./news/index.html", "./news/manifest.webmanifest",
+  "./news/icon.svg", "./news/icon-180.png", "./news/icon-192.png", "./news/icon-512.png"
+];
 
 const FILES = SHELL.concat(NEWS);
 
-/* /news/ 配下かどうか。ここだけ扱いを変える。 */
-function isNews(url) {
-  return new URL(url).pathname.includes("/news/");
+/*
+ * ネットワーク優先にするのは /news/ の「ページ」だけ。中身が毎朝変わるため。
+ * 同じ /news/ でもアイコンとmanifestは変わらないので、キャッシュ優先のままにする。
+ */
+function isNewsPage(url) {
+  const p = new URL(url).pathname;
+  return p.includes("/news/") && (p.endsWith("/") || p.endsWith(".html"));
 }
 
 self.addEventListener("install", e => {
@@ -39,7 +46,7 @@ self.addEventListener("fetch", e => {
   const req = e.request;
   if (new URL(req.url).origin !== self.location.origin) return;
 
-  if (isNews(req.url)) {
+  if (isNewsPage(req.url)) {
     /* ネットワーク優先。取れたら保存し、圏外なら最後に取れた号を返す。 */
     e.respondWith(
       fetch(req).then(res => {
